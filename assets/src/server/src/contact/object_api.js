@@ -27,10 +27,37 @@ var ObjectApiFactory = function (express, objectValidator, objectService, errorC
         })
     }
 
+    function getObjectAll(req, res) {
+        objectService.getObjectAll().then(function (object, err) {
+            res.status(200).send(object);
+        }).catch( function (err) {
+            res.status(400).json({status : errorConfig.errorCode.contentNotFound,
+                message: errorConfig.errorMessage.contentNotFound});
+        })
+    }
+
+    function getObject(req, res){
+        objectValidator.getValidatorID(req, res).then(function (objectID) {
+            var objectID = parseInt(req.params.id);
+            objectService.getObject(objectID).then(function (objects, err) {
+                res.status(200).send(objects);
+            }).catch(function (err) {
+                res.status(400).json({
+                    status: errorConfig.errorCode.contentNotFound,
+                    message: errorConfig.errorMessage.contentNotFound
+                });
+            });
+        })
+    }
+
     app.post('/api/object', insertObject);
+    app.get('/api/object/:id', getObject);
+    app.get('/api/object', getObjectAll);
 
     return {
-        insertObject : insertObject
+        insertObject : insertObject,
+        getObject : getObject,
+        getObjectAll : getObjectAll
     };
 
 

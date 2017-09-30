@@ -8,5 +8,7 @@ var server = container.startModule('server', { async: true})
         console.log('Server Running!!');
         console.log('Available methods');
         console.log('\tPOST /api/object');
+        console.log('\tGET /api/object');
+        console.log('\tGET /api/object/:id');
     });
 

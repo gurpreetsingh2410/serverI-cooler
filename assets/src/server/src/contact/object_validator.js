@@ -19,6 +19,21 @@ var ObjectValidatorFactory = function (errorConfig) {
             });
 
             return p.promise;
+        },
+
+        getValidatorID : function (req, res) {
+            id : req.assert('id', 'Invalid id').isInt();
+            var p = Promise.defer();
+
+            req.getValidationResult().then(function (result) {
+                if(!result.isEmpty()){
+                    res.status(400).json({status : errorConfig.errorCodes.failed, message: result.array()});
+                }else{
+                    p.resolve(req.body);
+                }
+            });
+
+            return p.promise;
         }
     }
 };

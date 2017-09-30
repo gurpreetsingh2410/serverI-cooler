@@ -23,7 +23,35 @@ var ObjectServiceFactory = function (database, schema) {
                     });
 
             return p.promise;
-        }
+        },
+
+        getObject: function(objectId) {
+            var p = Promise.defer();
+            objectModel.findOne({$query: {id : objectId}, $maxTimeMS: 100},{_id:0})
+                .then(function (result) {
+                    if(result){
+                        p.resolve(result);
+                    } else {
+                        p.reject();
+                    }
+                }).catch(function (err) {
+                p.reject("Object service failure " + err.toString());
+            });
+            return p.promise;
+        },
+
+        getObjectAll: function(){
+            var p = Promise.defer();
+            objectModel.find().then(function (data) {
+                if(data.length > 0){
+                    p.resolve(data);
+                }else{
+                    p.reject();
+                }
+            }).catch(function (err) {
+                p.reject("Registration service failure " + err.toString());
+            });
+            return p.promise;        }
     }
 
 };
